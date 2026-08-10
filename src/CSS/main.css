@@ -17,3 +17,45 @@
     canvas {
       display: block;
     }
+
+    #EndScreenWrapper{
+    pointer-events: none;
+    position: absolute;
+    display: none;
+    /* border: 1px solid red; */
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    }
+
+    #TVCVideoWrapper{
+      margin-top: 4%;
+      width: 90%;
+    }
+    #TVCVideo{
+      /* height: 100%; */
+      width: 100%;
+      border: 8px solid rgb(67, 7, 79);
+      border-radius: 20px;
+    }
+
+    #TVCLogoWrapper{
+    position: relative;
+    bottom: 5%;
+    width: 40%;
+    }
+    #TVCLogo{
+    height: 100%;
+    width: 100%;
+    }
+    #TVCGIFWrapper{
+    bottom: 3%;
+    position: relative;
+    width: 85%;
+    /* margin-bottom: 50%; */
+    }
+    #TVCGIF{
+    height: 100%;
+    width: 100%;
+    }

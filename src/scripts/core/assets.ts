@@ -1,18 +1,32 @@
-import { Application, Graphics, Texture } from "pixi.js";
-import type { AssetFactory } from "./context";
+import {Assets, Rectangle, Texture } from "pixi.js";
+import { Manifest, type AssetAlias } from "./manifest";
 
-// Placeholder generator so the flow is testable before real art lands.
-// Swap the internals here for PIXI.Assets.load() sprite-sheet loading —
-// nothing outside this file needs to change.
-export function createAssets(app: Application): AssetFactory {
+const BUBBLE_FRAME_SIZE = 32;
+
+export interface AssetFactory{
+  get(alias:AssetAlias):Texture,
+  bubbleFrame(index:0|1|2):Texture
+}
+
+export async function loadAssets(): Promise<AssetFactory>{
+  const entries = Object.entries(Manifest) as [AssetAlias,string][];
+
+    await Assets.load(entries.map(([alias, src]) => ({ alias, src })));
+    const bubbleSheet = await Assets.load<Texture>(Manifest.bubble);
+    const bubbleFrames: Texture[] = [0, 1, 2].map(
+      (i) =>
+        new Texture({
+          source: bubbleSheet.source,
+          frame: new Rectangle(i * BUBBLE_FRAME_SIZE, 0, BUBBLE_FRAME_SIZE, BUBBLE_FRAME_SIZE),
+        })
+    );
+
   return {
-    circle(radius: number, color: number, alpha = 1): Texture {
-      const g = new Graphics().circle(0, 0, radius).fill({ color, alpha });
-      return app.renderer.generateTexture(g);
+    get(alias: AssetAlias): Texture {
+      return Assets.get(alias);
     },
-    roundedRect(w: number, h: number, radius: number, color: number): Texture {
-      const g = new Graphics().roundRect(0, 0, w, h, radius).fill({ color });
-      return app.renderer.generateTexture(g);
+    bubbleFrame(index:0|1|2): Texture {
+      return bubbleFrames[index];
     },
   };
 }

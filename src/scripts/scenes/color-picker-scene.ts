@@ -1,26 +1,53 @@
-import { Sprite, Circle } from "pixi.js";
+import { Graphics } from "pixi.js";
 import { Scene } from "../core/scene";
-import { ctx } from "../core/context";
-import { buildBackdrop, buildLabel } from "../helpers/backdrop";
+import { getAquarium } from "../helpers/backdrop";
 import { DESIGN_WIDTH, DESIGN_HEIGHT } from "../constants";
 import { BubbleGameScene } from "./bubble-game-scene";
+import { buildLabel } from "../helpers/buildLabel";
+import type { Aquarium } from "../components/aquarium";
+import { rgbStringToArray, TankColors } from "../helpers/colors";
+
+const SWATCH_WIDTH = 90;
+const SWATCH_HEIGHT = 90;
+const SWATCH_RADIUS = 18; // corner radius, not size
+const SWATCH_GAP = 45; // space between swatch edges, not centers
 
 export class ColorPickerScene extends Scene {
+  private aquarium : Aquarium|undefined = undefined;
   onEnter() {
-    this.addChild(buildBackdrop());
-    this.addChild(buildLabel("CHANGE THE\nAQUARIUM COLOUR", DESIGN_HEIGHT * 0.85));
+    this.aquarium = getAquarium();
+    this.addChild(buildLabel("CHANGE THE\nAQUARIUM COLOUR",));
 
-    const colors = [0x8f7bd6, 0xff9a4d, 0x4dd68f];
-    colors.forEach((color, i) => {
-      const swatch = new Sprite(ctx.assets.circle(30, color));
-      swatch.anchor.set(0.5);
-      swatch.x = DESIGN_WIDTH / 2 + (i - 1) * 90;
-      swatch.y = DESIGN_HEIGHT * 0.25;
+
+
+    const spacing = SWATCH_WIDTH + SWATCH_GAP;
+    const totalWidth = (TankColors.length - 1) * spacing;
+    const startX = DESIGN_WIDTH / 2 - totalWidth / 2;
+    
+    const swatches :Graphics[]=[];
+    TankColors.forEach((color, i) => {
+      const swatch = new Graphics()
+        .roundRect(-SWATCH_WIDTH / 2, -SWATCH_HEIGHT / 2, SWATCH_WIDTH, SWATCH_HEIGHT, SWATCH_RADIUS)
+        .fill({ color })
+        .stroke({color:"rgb(91, 146, 214)",width:SWATCH_RADIUS/2}); 
+      swatches.push(swatch);
+      swatch.x = startX + i * spacing;
+      swatch.y = DESIGN_HEIGHT * (i == 0 || i == TankColors.length-1 ?  0.275 : 0.25)
       swatch.eventMode = "static";
       swatch.cursor = "pointer";
-      swatch.hitArea = new Circle(0, 0, 30);
-      swatch.on("pointertap", () => this.manager.goTo(BubbleGameScene));
+      swatch.on("pointertap",()=>
+        {
+          //refactor to have a nice move & fade out.
+          for(let index of swatches){index.visible = false};
+          if(this.aquarium)
+          this.aquarium.tintAquarium(rgbStringToArray(color),1.5,()=>{this.manager.goTo(BubbleGameScene)});
+        })
+      // swatch.on("pointertap", () => this.manager.goTo(BubbleGameScene));
       this.addChild(swatch);
     });
   }
+
+  onExit() {
+  }
 }
+

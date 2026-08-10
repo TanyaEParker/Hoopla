@@ -1,30 +1,51 @@
-import { Sprite, Circle } from "pixi.js";
 import { Scene } from "../core/scene";
-import { Tween } from "../core/tween";
-import { ctx } from "../core/context";
-import { buildBackdrop, buildLabel } from "../helpers/backdrop";
+import { Tween } from "../helpers/tween";
+import { setBackdropCharacter } from "../helpers/backdrop";
 import { DESIGN_WIDTH, DESIGN_HEIGHT } from "../constants";
+import { Character } from "../components/character";
+import type { AssetAlias } from "../core/manifest";
+import { buildLabel } from "../helpers/buildLabel";
 import { ColorPickerScene } from "./color-picker-scene";
+
+interface CharacterData {
+  alias :AssetAlias,
+  isLocked : boolean,
+  x:number,
+  y:number
+}
+
+const CHARACTERS:CharacterData[]=[
+  {alias:"mantaBasic",isLocked:true,x:DESIGN_WIDTH*0.35,y:DESIGN_HEIGHT*0.2},
+  {alias:"turtleBasic",isLocked:false,x:DESIGN_WIDTH*0.65,y:DESIGN_HEIGHT*0.2},
+  {alias:"mermaidBasic",isLocked:true,x:DESIGN_WIDTH*0.2,y:DESIGN_HEIGHT*0.35},
+  {alias:"dogBasic",isLocked:true,x:DESIGN_WIDTH*0.5,y:DESIGN_HEIGHT*0.35},
+  {alias:"sharkBasic",isLocked:true,x:DESIGN_WIDTH*0.80,y:DESIGN_HEIGHT*0.35},
+]
 
 export class CharacterSelectScene extends Scene {
   onEnter() {
-    this.addChild(buildBackdrop());
-    this.addChild(buildLabel("PLAY TO UNLOCK MORE", DESIGN_HEIGHT * 0.85));
+    this.addChild(buildLabel("PLAY TO\nUNLOCK MORE"));
 
-    const turtle = new Sprite(ctx.assets.circle(50, 0x3fae7a));
-    turtle.anchor.set(0.5);
-    turtle.x = DESIGN_WIDTH / 2;
-    turtle.y = DESIGN_HEIGHT * 0.42;
-    turtle.eventMode = "static";
-    turtle.cursor = "pointer";
-    turtle.hitArea = new Circle(0, 0, 50);
-    this.addChild(turtle);
+    for(let index of CHARACTERS)
+    {
+      const character = new Character(index.alias,index.isLocked);
+      this.addChild(character);
+      character.x = index.x;
+      character.y = index.y;
 
-    turtle.on("pointertap", () => {
-      this.manager.goTo(ColorPickerScene);
-    });
+      if(!index.isLocked)
+      {
+        character.characterSprite.on("pointertap",()=>
+          {
+            setBackdropCharacter(index.alias);
+            this.manager.goTo(ColorPickerScene)
+            
+          })
+      }
 
-    turtle.scale.set(0);
-    Tween.to(turtle.scale, { x: 1, y: 1 }, 0.5, Tween.easeOutBack);
+      character.scale.set(0);
+      Tween.to(character.scale,{x:0.9,y:0.9},0.5,Tween.easeOutBack);
+    }
   }
+
 }

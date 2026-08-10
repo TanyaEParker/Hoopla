@@ -1,9 +1,6 @@
-import type { Application, Texture } from "pixi.js";
+import type { Application } from "pixi.js";
+import type { AssetFactory } from "./assets";
 
-export interface AssetFactory {
-  circle(radius: number, color: number, alpha?: number): Texture;
-  roundedRect(w: number, h: number, radius: number, color: number): Texture;
-}
 
 // Populated once in main.ts after app.init() resolves. Everything else
 // (scenes, UI components) imports `ctx` and reads from it — avoids

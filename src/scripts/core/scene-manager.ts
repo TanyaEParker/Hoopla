@@ -1,5 +1,5 @@
 import { Application, Graphics } from "pixi.js";
-import { Tween } from "./tween";
+import { Tween } from "../helpers/tween";
 import type { Scene, SceneClass } from "./scene";
 import type { HeartMeter } from "../ui/heart-meter";
 import { DESIGN_WIDTH, DESIGN_HEIGHT } from "../constants";
@@ -8,15 +8,17 @@ export class SceneManager {
   current: Scene | null = null;
   hud: { heart: HeartMeter | null } = { heart: null };
   private overlay: Graphics;
+  private app: Application;
 
-  constructor(private app: Application) {
+  constructor(app: Application) {
+    this.app = app;
     this.overlay = new Graphics()
       .rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT)
       .fill({ color: 0x000000 });
     this.overlay.alpha = 0;
     this.overlay.eventMode = "none";
 
-    app.ticker.add(() => {
+    this.app.ticker.add(() => {
       this.current?.update(app.ticker.deltaMS);
     });
   }
@@ -30,7 +32,7 @@ export class SceneManager {
         this.app.stage.removeChild(this.current);
         this.current.destroy({ children: true });
       }
-      this.app.stage.addChildAt(incoming, 0);
+      this.app.stage.addChild(incoming);
       this.current = incoming;
       incoming.onEnter();
 

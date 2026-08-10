@@ -1,4 +1,6 @@
 import { Container, Text } from "pixi.js";
+import { buildLabel } from "../helpers/buildLabel";
+import { DESIGN_HEIGHT } from "../constants";
 
 export class CountdownTimer extends Container {
   remaining: number;
@@ -9,17 +11,8 @@ export class CountdownTimer extends Container {
   constructor(seconds: number) {
     super();
     this.remaining = seconds;
-    this.Timerlabel = new Text({
-      text: `${Math.ceil(this.remaining)}`,
-      style: {
-        fontFamily: "Arial",
-        fontSize: 42,
-        fontWeight: "bold",
-        fill: 0xffffff,
-        stroke: { color: 0x000000, width: 4 },
-      },
-    });
-    this.Timerlabel.anchor.set(0.5);
+    this.Timerlabel = buildLabel(`${Math.round(this.remaining)}s`,DESIGN_HEIGHT*0.365);
+    this.Timerlabel.scale.set(1.5)
     this.addChild(this.Timerlabel);
   }
 
@@ -31,8 +24,8 @@ export class CountdownTimer extends Container {
   update(deltaMS: number) {
     if (this.done) return;
     this.remaining -= deltaMS / 1000;
-    this.Timerlabel.text = `${Math.max(Math.ceil(this.remaining), 0)}`;
-    if (this.remaining <= 0) {
+    this.Timerlabel.text = `${Math.max(Math.round(this.remaining), 0)}s`;
+    if (this.remaining < 0) {
       this.done = true;
       this.onCompleteCb?.();
     }

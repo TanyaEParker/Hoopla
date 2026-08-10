@@ -3,11 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Bitzee Aquarium</title>
-<link rel="stylesheet" href="./src/CSS/main.css"></link>
+<title>Hoopla Techical Test</title>
+<link rel="stylesheet" href="./src/CSS/main.css">
+<link rel="icon" type="image/png" href="/src/assets/Branding/favicon.png">
 </head>
 <body>
-<div id="game-container"></div>
+<div id="game-container">
+    <div id="EndScreenWrapper">
+        <div id="TVCVideoWrapper"><video id = "TVCVideo" src="./src/assets/Branding/BitzeeVideo.mp4" muted loop autoplay>Your device cannot play this video</video></div>
+        <div id="TVCLogoWrapper"><img id='TVCLogo' src="./src/assets/Branding/logo2.png"></div>
+        <div id="TVCGIFWrapper"><img src="./src/assets/Branding/BitzeeTank.gif" id="TVCGIF"></div>
+    </div>
+</div>
 <script type="module" src="/src/scripts/main.ts"></script>
 </body>
 </html>
