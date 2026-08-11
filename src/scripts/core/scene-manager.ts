@@ -7,16 +7,16 @@ import { DESIGN_WIDTH, DESIGN_HEIGHT } from "../constants";
 export class SceneManager {
   current: Scene | null = null;
   hud: { heart: HeartMeter | null } = { heart: null };
-  private overlay: Graphics;
+  // private overlay: Graphics;
   private app: Application;
 
   constructor(app: Application) {
     this.app = app;
-    this.overlay = new Graphics()
-      .rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT)
-      .fill({ color: 'rgb(33, 141, 235)' });
-    this.overlay.alpha = 0;
-    this.overlay.eventMode = "none";
+    // this.overlay = new Graphics()
+    //   .rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT)
+    //   .fill({ color: 'rgb(33, 141, 235)' });
+    // this.overlay.alpha = 0;
+    // this.overlay.eventMode = "none";
 
     this.app.ticker.add(() => {
       this.current?.update(app.ticker.deltaMS);
@@ -36,20 +36,20 @@ export class SceneManager {
       this.current = incoming;
       incoming.onEnter();
 
-      this.overlay.alpha = 0;
-      this.app.stage.addChild(this.overlay);
-      Tween.to(this.overlay, { alpha: 0 }, 0.35, Tween.easeOutQuad, () => {
-        // this.app.stage.removeChild(this.overlay);
-      });
+      // this.overlay.alpha = 0;
+      // this.app.stage.addChild(this.overlay);
+      // Tween.to(this.overlay, { alpha: 0 }, 0.35, Tween.easeOutQuad, () => {
+      //   // this.app.stage.removeChild(this.overlay);
+      // });
     };
 
     if (!this.current) {
       finishSwap();
       return;
     }
-
-    this.overlay.alpha = 0;
-    this.app.stage.addChild(this.overlay);
-    Tween.to(this.overlay, { alpha: 0 }, 0.25, Tween.easeOutQuad, finishSwap);
+    finishSwap();
+    // this.overlay.alpha = 0;
+    // this.app.stage.addChild(this.overlay);
+    // Tween.to(this.overlay, { alpha: 0 }, 0.25, Tween.easeOutQuad, finishSwap);
   }
 }

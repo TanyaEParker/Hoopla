@@ -24,10 +24,11 @@ export class Aquarium extends Container{
 
     public aquariumWidth:number=0;
     private tintables : Sprite[] = [];
-
+    private currentTankColour:string ='';
     private activeTweens = new Map<Sprite, ReturnType<typeof tweenTint>>();
     constructor() {
         super();
+        this.currentTankColour = TankColors[0].toString();
         for(const index of LAYERS){
             const sprite = new Sprite(ctx.assets.get(index.alias));
             sprite.anchor.set(0.5);
@@ -44,8 +45,8 @@ export class Aquarium extends Container{
 
     public tintAquarium(tintColour:[number,number,number],duration:number,onComplete?:()=>void)
     {
-        //clunky, but does not lerp to the starting tank colour.
-        if(tintColour.toString()===rgbStringToArray(TankColors[0]).toString()){onComplete?.();return;}
+        if(tintColour.toString()===this.currentTankColour){onComplete?.();return;}
+        this.currentTankColour = tintColour.toString();
         if(this.tintables.length == 0){onComplete?.();return;}
         let remaining = this.tintables.length;
         for(const index of this.tintables)

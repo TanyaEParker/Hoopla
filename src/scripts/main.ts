@@ -14,6 +14,7 @@ async function boot() {
   if(elem instanceof HTMLDivElement) endUI = elem;
   const app = new Application();
   await app.init({
+    // resizeTo:window,
     width: DESIGN_WIDTH,
     height: DESIGN_HEIGHT,
     antialias: false,
@@ -24,6 +25,7 @@ async function boot() {
   document.getElementById("game-container")!.appendChild(app.canvas);
 
   function resize() {
+    // SIZE.DESIGN_HEIGHT = window.inn
     const scale = Math.min(
       window.innerWidth / DESIGN_WIDTH,
       window.innerHeight / DESIGN_HEIGHT
