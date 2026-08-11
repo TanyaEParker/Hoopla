@@ -4,9 +4,8 @@ import { ctx } from "./core/context";
 import { loadAssets } from "./core/assets";
 import { Tween } from "./helpers/tween";
 import { SceneManager } from "./core/scene-manager";
-import { CharacterSelectScene } from "./scenes/character-select-scene";
 import { buildBackdrop } from "./helpers/backdrop";
-import { EndCardScene } from "./scenes/end-card-scene";
+import { LoadingScreenScene } from "./scenes/loading-screen-scene";
 
 export let endUI : HTMLDivElement
 
@@ -47,14 +46,15 @@ async function boot() {
     data:{family:'pixelFont'}
   });
   ctx.app = app;
-  TextureSource.defaultOptions.scaleMode = 'nearest';
-  //load all game assets up front. Loading screen would go here if needed
-  ctx.assets = await loadAssets();
 
+  TextureSource.defaultOptions.scaleMode = 'nearest';
+
+
+  ctx.assets = await loadAssets();
   app.ticker.add(() => Tween.update(app.ticker.deltaMS));
   app.stage.addChild(buildBackdrop());
   const sceneManager = new SceneManager(app);
-  sceneManager.goTo(EndCardScene);
+  sceneManager.goTo(LoadingScreenScene);
 }
 
 boot();

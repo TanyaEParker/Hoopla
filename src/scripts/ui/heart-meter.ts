@@ -1,5 +1,4 @@
 import { Container, Graphics } from "pixi.js";
-import { PALETTE } from "../constants";
 
 export class HeartMeter extends Container {
   maxValue = 2; // e.g. 3 completed games = full heart -> evolution
@@ -12,11 +11,11 @@ export class HeartMeter extends Container {
     super();
     this.addChild(this.fill, this.outline, this.fillMask);
     this.fill.mask = this.fillMask;
-    this.drawHeartPath(this.outline, PALETTE.heartRed, false);
+    this.drawHeartPath(this.outline, 'rgb(255,0,0)', false);
     this.redrawFill();
   }
 
-  private drawHeartPath(g: Graphics, color: number, filled: boolean) {
+  private drawHeartPath(g: Graphics, color: string, filled: boolean) {
     g.clear();
     g.moveTo(0, 12);
     g.bezierCurveTo(-30, -20, -60, 10, 0, 50);
@@ -34,7 +33,7 @@ export class HeartMeter extends Container {
       .clear()
       .rect(-60, 50 - 70 * pct, 120, 70 * pct)
       .fill({ color: 0xffffff });
-    this.drawHeartPath(this.fill, PALETTE.heartRed, true);
+    this.drawHeartPath(this.fill, 'rgb(255,0,0)', true);
   }
 
   reset(): void {

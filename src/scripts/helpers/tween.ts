@@ -1,8 +1,8 @@
 // No external tween lib — keeps bundle size down, which matters for
 // ad-network file-size caps. Good enough for juice: scale/alpha/position.
-type Easing = (t: number) => number;
+export type Easing = (t: number) => number;
 
-interface ActiveTween {
+export interface ActiveTween {
   target: any;
   start: Record<string, number>;
   props: Record<string, number>;
@@ -56,6 +56,7 @@ class TweenController {
       const eased = t.easing(progress);
       for (const key in t.props) {
         t.target[key] = t.start[key] + (t.props[key] - t.start[key]) * eased;
+        if(t.target[key]==null)console.log('null')
       }
       t.onUpdate?.(t.target);
       if (progress >= 1) {

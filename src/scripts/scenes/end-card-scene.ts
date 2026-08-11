@@ -5,7 +5,6 @@ import { DESIGN_WIDTH, DESIGN_HEIGHT } from "../constants";
 import { CharacterSelectScene } from "./character-select-scene";
 import { buildLabel } from "../helpers/buildLabel";
 import { getAquarium, toggleLogo } from "../helpers/backdrop";
-import { Tween } from "../helpers/tween";
 import { endUI } from "../main";
 
 export class EndCardScene extends Scene {
@@ -16,7 +15,6 @@ export class EndCardScene extends Scene {
     const Aquarium = getAquarium();
     if(endUI)endUI.style.display = 'flex';
     Aquarium.visible = false;
-    // this.showDOMUI();
   
     // const Character = getCharacter();
     // if(Character)
@@ -32,10 +30,10 @@ export class EndCardScene extends Scene {
     replay.tint = "rgb(149, 0, 255)"
     replay.on("pointertap", () =>
       {
-        this.manager.goTo(CharacterSelectScene);
         if(endUI)endUI.style.display = 'none'
         Aquarium.visible = true;
         toggleLogo(true);
+        this.manager.goTo(CharacterSelectScene);
       });
     this.addChild(replay);
     const replayText = new Text({text:'Replay'.toUpperCase(),style: {fontFamily: "pixelFont",fontSize: 30,fontWeight: "bold",fill: 'rgb(255,255,255)',align: "center",}});

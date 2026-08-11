@@ -21,7 +21,9 @@ export const Manifest =
     //characters
     characterHighlight:new URL("../../assets/CharacterScreen/CharacterHighlight.png",import.meta.url).href,
     turtleBasic:new URL("../../assets/CharacterScreen/turtle_basic.png",import.meta.url).href,
+    turtleBasicMask:new URL("../../assets/CharacterScreen/turtle_basic_mask.png",import.meta.url).href,
     turtleEvolved:new URL("../../assets/CharacterScreen/turtle_evolved.png",import.meta.url).href,
+    turtleEvolvedMask:new URL("../../assets/CharacterScreen/turtle_evolved_mask.png",import.meta.url).href,
     dogBasic:new URL("../../assets/CharacterScreen/dog_basic.png",import.meta.url).href,
     mantaBasic:new URL("../../assets/CharacterScreen/manta_basic.png",import.meta.url).href,
     mermaidBasic:new URL("../../assets/CharacterScreen/shark_Basic.png",import.meta.url).href,
@@ -31,7 +33,12 @@ export const Manifest =
     //colour Select
 
     //heart UI
-
+    heart: new URL("../../assets/UI/heartOutline.png",import.meta.url).href,
+    heartFill: new URL("../../assets/UI/heartFill.png",import.meta.url).href,
+    //evolution
+    firework:new URL('../../assets/evolution/sparkles.png',import.meta.url).href,
+    perlinMap:new URL('../../assets/evolution/perlin.png',import.meta.url).href,
+    sparkle:new URL('../../assets/evolution/sparkles_2.png',import.meta.url).href,
     //bubble game
     bubble: new URL("../../assets/bubbleGame/bubbles.png",import.meta.url).href,
     bubblePop: new URL("../../assets/bubbleGame/bubblePop.png",import.meta.url).href,

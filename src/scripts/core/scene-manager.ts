@@ -14,7 +14,7 @@ export class SceneManager {
     this.app = app;
     this.overlay = new Graphics()
       .rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT)
-      .fill({ color: 0x000000 });
+      .fill({ color: 'rgb(33, 141, 235)' });
     this.overlay.alpha = 0;
     this.overlay.eventMode = "none";
 
@@ -36,10 +36,10 @@ export class SceneManager {
       this.current = incoming;
       incoming.onEnter();
 
-      this.overlay.alpha = 1;
+      this.overlay.alpha = 0;
       this.app.stage.addChild(this.overlay);
       Tween.to(this.overlay, { alpha: 0 }, 0.35, Tween.easeOutQuad, () => {
-        this.app.stage.removeChild(this.overlay);
+        // this.app.stage.removeChild(this.overlay);
       });
     };
 
@@ -50,6 +50,6 @@ export class SceneManager {
 
     this.overlay.alpha = 0;
     this.app.stage.addChild(this.overlay);
-    Tween.to(this.overlay, { alpha: 1 }, 0.25, Tween.easeOutQuad, finishSwap);
+    Tween.to(this.overlay, { alpha: 0 }, 0.25, Tween.easeOutQuad, finishSwap);
   }
 }

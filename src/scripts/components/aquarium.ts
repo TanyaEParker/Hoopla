@@ -3,7 +3,8 @@ import { tweenTint, } from "../helpers/tint-tween";
 import { Tween } from "../helpers/tween";
 import { ctx } from "../core/context";
 import type { AssetAlias } from "../core/manifest";
-import { rgbStringToArray, TankColors } from "../helpers/colors";
+import { rgbStringToArray } from "../helpers/colors";
+import { TankColors } from "../constants";
 
 interface AquariumElement{
     alias:AssetAlias,
@@ -21,6 +22,7 @@ const LAYERS : AquariumElement[] = [
 
 export class Aquarium extends Container{
 
+    public aquariumWidth:number=0;
     private tintables : Sprite[] = [];
 
     private activeTweens = new Map<Sprite, ReturnType<typeof tweenTint>>();
@@ -36,6 +38,7 @@ export class Aquarium extends Container{
                 sprite.tint = TankColors[0];
             }
         }
+        this.aquariumWidth = this.tintables[0].width;
         
     }
 

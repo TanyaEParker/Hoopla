@@ -1,26 +1,25 @@
 import { Graphics } from "pixi.js";
 import { Scene } from "../core/scene";
 import { getAquarium } from "../helpers/backdrop";
-import { DESIGN_WIDTH, DESIGN_HEIGHT } from "../constants";
+import { DESIGN_WIDTH, DESIGN_HEIGHT, TankColors } from "../constants";
 import { BubbleGameScene } from "./bubble-game-scene";
 import { buildLabel } from "../helpers/buildLabel";
 import type { Aquarium } from "../components/aquarium";
-import { rgbStringToArray, TankColors } from "../helpers/colors";
+import { rgbStringToArray } from "../helpers/colors";
+import { Tween } from "../helpers/tween";
 
 const SWATCH_WIDTH = 90;
 const SWATCH_HEIGHT = 90;
 const SWATCH_RADIUS = 18; // corner radius, not size
 const SWATCH_GAP = 45; // space between swatch edges, not centers
+const spacing = SWATCH_WIDTH + SWATCH_GAP;
 
 export class ColorPickerScene extends Scene {
   private aquarium : Aquarium|undefined = undefined;
   onEnter() {
     this.aquarium = getAquarium();
-    this.addChild(buildLabel("CHANGE THE\nAQUARIUM COLOUR",));
+    this.addChild(buildLabel("CHANGE THE\nAQUARIUM COLOUR"));
 
-
-
-    const spacing = SWATCH_WIDTH + SWATCH_GAP;
     const totalWidth = (TankColors.length - 1) * spacing;
     const startX = DESIGN_WIDTH / 2 - totalWidth / 2;
     
@@ -35,16 +34,20 @@ export class ColorPickerScene extends Scene {
       swatch.y = DESIGN_HEIGHT * (i == 0 || i == TankColors.length-1 ?  0.275 : 0.25)
       swatch.eventMode = "static";
       swatch.cursor = "pointer";
+      swatch.alpha = 0;
       swatch.on("pointertap",()=>
         {
           //refactor to have a nice move & fade out.
-          for(let index of swatches){index.visible = false};
+          for(let index of swatches){Tween.to(index,{alpha:0},0.25,Tween.easeInOutQuad)};
           if(this.aquarium)
           this.aquarium.tintAquarium(rgbStringToArray(color),1.5,()=>{this.manager.goTo(BubbleGameScene)});
         })
-      // swatch.on("pointertap", () => this.manager.goTo(BubbleGameScene));
       this.addChild(swatch);
     });
+    for(let swatch of swatches)
+    {
+      Tween.to(swatch,{alpha:1},0.25,Tween.easeInOutQuad);
+    }
   }
 
   onExit() {

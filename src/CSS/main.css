@@ -30,6 +30,7 @@
     }
 
     #TVCVideoWrapper{
+      max-width:530px;
       margin-top: 4%;
       width: 90%;
     }
@@ -41,6 +42,7 @@
     }
 
     #TVCLogoWrapper{
+    max-width: 220px;
     position: relative;
     bottom: 5%;
     width: 40%;
@@ -50,6 +52,7 @@
     width: 100%;
     }
     #TVCGIFWrapper{
+    max-width: 500px;
     bottom: 3%;
     position: relative;
     width: 85%;

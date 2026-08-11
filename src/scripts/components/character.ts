@@ -1,15 +1,17 @@
 import { Container, Sprite } from "pixi.js";
 import type { AssetAlias } from "../core/manifest";
-import { Tween } from "../helpers/tween";
+import { Tween, type ActiveTween } from "../helpers/tween";
+import { Timeline } from "../helpers/timeline";
 import { ctx } from "../core/context";
 
 export class Character extends Container{
 
     public characterSprite : Sprite;
     public characterHighlight : Sprite;
+    private highlightAnim :ActiveTween;
     private isLocked : boolean;
     private lockSprite? : Sprite;
-    private lockAnim?: ReturnType<typeof Tween.to>;
+    private lockTimeline?: Timeline;
     constructor(character:AssetAlias,Locked:boolean){
         super();
         this.isLocked = Locked;
@@ -20,7 +22,7 @@ export class Character extends Container{
         this.characterHighlight.alpha = 0.5;
         this.characterHighlight.scale.set(1.5);
 
-        Tween.to(this.characterHighlight.scale,{x:1,y:1},1,Tween.easeInOutQuad,undefined,undefined,true,true);
+        this.highlightAnim = Tween.to(this.characterHighlight.scale,{x:1,y:1},1,Tween.easeInOutQuad,undefined,undefined,true,true);
 
         this.characterSprite = new Sprite(ctx.assets.get(character));
         this.characterSprite.anchor.set(0.5);
@@ -46,27 +48,22 @@ export class Character extends Container{
     }
 
     private playLockSwing(){
-        if(!this.lockSprite)return;
-        const legTo = (rotation:number,duration:number,easing = Tween.easeInOutQuad,next?:()=>void,)=>
-        {
-            if(!this.lockSprite)return;
-            this.lockAnim = Tween.to(
-                this.lockSprite,
-                {rotation},
-                duration,
-                easing,
-                next
-            );
+        if(!this.lockSprite) return;
+        
+        const cycle = () => {
+            this.lockTimeline = new Timeline();
+            this.lockTimeline.add(this.lockSprite!, { rotation: 0.3 }, 0.3, Tween.easeOutQuad);
+            this.lockTimeline.add(this.lockSprite!, { rotation: -0.3 }, 0.6, Tween.easeInOutQuad);
+            this.lockTimeline.add(this.lockSprite!, { rotation: 0 }, 0.3, Tween.easeInQuad);
+            this.lockTimeline.onComplete(cycle).play();
         };
-        const cycle = ()=>{
-            legTo(0.3,0.3,Tween.easeOutQuad,()=>legTo(-0.3,0.6,Tween.easeInOutQuad,()=>legTo(0,0.3,Tween.easeInQuad,cycle)));
-        };
+        
         cycle();
     }
 
     destroy(options?: Parameters<Container["destroy"]>[0]) {
-    console.log('stopping tween if active');
-    if (this.lockAnim) Tween.stop(this.lockAnim);
-    super.destroy(options);
-}
+        if(this.highlightAnim) Tween.stop(this.highlightAnim);
+        if (this.lockTimeline) this.lockTimeline.stop();
+        super.destroy(options);
+    }
 }

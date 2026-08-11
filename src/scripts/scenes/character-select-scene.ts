@@ -23,13 +23,14 @@ const CHARACTERS:CharacterData[]=[
 ]
 
 export class CharacterSelectScene extends Scene {
+  private characterButtons:Character[] = [];
   onEnter() {
     this.addChild(buildLabel("PLAY TO\nUNLOCK MORE"));
-
     for(let index of CHARACTERS)
     {
       const character = new Character(index.alias,index.isLocked);
       this.addChild(character);
+      this.characterButtons.push(character);
       character.x = index.x;
       character.y = index.y;
 
