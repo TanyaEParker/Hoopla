@@ -16,7 +16,7 @@ interface Bubble extends Sprite {
 const SPAWN_X_RANGE = 500;
 const SPAWN_Y_RANGE = 200;
 const SPAWN_CENTER_Y = DESIGN_HEIGHT * 0.6;
-const POP_RADIUS = 20;
+const POP_RADIUS = 50;
 export class BubbleGameScene extends Scene {
   private bubbles: Bubble[] = [];
   private spawnTimer = 0;
@@ -30,12 +30,12 @@ export class BubbleGameScene extends Scene {
 
   onEnter() {
 
-    this.heart = this.manager.hud.heart ?? new HeartMeter();
-    this.manager.hud.heart = this.heart;
-    this.heart.x = DESIGN_WIDTH / 2;
-    this.heart.y = DESIGN_HEIGHT * 0.185;
-    this.heart.scale.set(2);
-    this.addChild(this.heart);
+    if (!this.manager.hud.heart) {
+      this.manager.hud.heart = new HeartMeter();
+      this.manager.app.stage.addChild(this.manager.hud.heart);
+    }
+    
+    this.heart = this.manager.hud.heart;
     this.heart.reset();
 
     this.instructionLabel = buildLabel("TIME TO PLAY!");
@@ -88,6 +88,7 @@ export class BubbleGameScene extends Scene {
 
   private popBubble(bubble: Bubble) {
     if (bubble._popped) return;
+    ctx.assets.getSound('bubble');
     bubble._popped = true;
     bubble.eventMode = "none";
 

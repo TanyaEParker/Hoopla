@@ -7,6 +7,7 @@ import { buildLabel } from "../helpers/buildLabel";
 import type { Aquarium } from "../components/aquarium";
 import { rgbStringToArray } from "../helpers/colors";
 import { Tween } from "../helpers/tween";
+import { ctx } from "../core/context";
 
 const SWATCH_WIDTH = 90;
 const SWATCH_HEIGHT = 90;
@@ -37,6 +38,7 @@ export class ColorPickerScene extends Scene {
       swatch.alpha = 0;
       swatch.on("pointertap",()=>
         {
+          ctx.assets.getSound('button');
           //refactor to have a nice move & fade out.
           for(let index of swatches){Tween.to(index,{alpha:0},0.25,Tween.easeInOutQuad)};
           if(this.aquarium)

@@ -6,6 +6,7 @@ import { CharacterSelectScene } from "./character-select-scene";
 import { buildLabel } from "../helpers/buildLabel";
 import { getAquarium, toggleLogo } from "../helpers/backdrop";
 import { endUI } from "../main";
+import { Tween } from "../helpers/tween";
 
 export class EndCardScene extends Scene {
   onEnter() {
@@ -30,10 +31,13 @@ export class EndCardScene extends Scene {
     replay.tint = "rgb(149, 0, 255)"
     replay.on("pointertap", () =>
       {
-        if(endUI)endUI.style.display = 'none'
-        Aquarium.visible = true;
-        toggleLogo(true);
-        this.manager.goTo(CharacterSelectScene);
+        ctx.assets.getSound('button');
+        Tween.to(replay.scale,{x:2.5,y:2.5},0.2,Tween.easeInOutQuad,()=>{
+          if(endUI)endUI.style.display = 'none'
+          Aquarium.visible = true;
+          toggleLogo(true);
+          this.manager.goTo(CharacterSelectScene);
+        });
       });
     this.addChild(replay);
     const replayText = new Text({text:'Replay'.toUpperCase(),style: {fontFamily: "pixelFont",fontSize: 30,fontWeight: "bold",fill: 'rgb(255,255,255)',align: "center",}});
@@ -51,7 +55,12 @@ export class EndCardScene extends Scene {
     learnMore.tint = "rgb(255, 191, 0)"
     // Clickthrough — real ad networks expose their own API for this
     // (e.g. MRAID's mraid.open(), or a network-specific click macro).
-    learnMore.on("pointertap", () => console.log("clickthrough fired"));
+    learnMore.on("pointertap", () => {
+      ctx.assets.getSound('button');
+      Tween.to(learnMore.scale,{x:2.5,y:2.5},0.2,Tween.easeInOutQuad,()=>{
+        window.open('https://play.bitzee.com/bitzee-aquarium','_blank')
+      },undefined,undefined,true)
+    });
     this.addChild(learnMore);
     const learnMoreText = new Text({text:'learn\nmore'.toUpperCase(),style: {fontFamily: "pixelFont",fontSize: 30,fontWeight: "bold",fill: 'rgb(255,255,255)',align: "center",}});
     learnMoreText.anchor.set(0.5),

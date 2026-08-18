@@ -45,7 +45,6 @@ let characterTween: ReturnType<typeof Tween.to> | null = null;
 export function buildBackdrop(): Container {
   if(cachedBackdrop)return cachedBackdrop;
 
-  console.log('making new backdrop')
   const container = new Container();
   cachedBackdrop = container;
   for(let index of Elements)
@@ -107,7 +106,6 @@ export function setBackdropCharacter(alias: AssetAlias): Sprite {
 
   const cycle = () => {
     if(!cachedAquarium)return;
-    console.log(DESIGN_WIDTH*0.5 - cachedAquarium.width);
     characterTimeline = new Timeline();
     characterTimeline.add(character, { x: (DESIGN_WIDTH*0.5 + cachedAquarium.width/2.8)}, MoveAnimLength * 0.5, Tween.easeOutQuad);
     characterTimeline.add(character.scale, { x: -1 }, 0.1); // flip left

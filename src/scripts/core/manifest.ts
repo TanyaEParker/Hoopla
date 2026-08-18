@@ -47,24 +47,21 @@ export const Manifest =
     button: new URL("../../assets/UI/button.png",import.meta.url).href
 }
 
+// all audio was converted to mono
 export const AudioManifest = 
 {
     //Sourced from Pixabay, audio by Artem Hramushkin
-    BGM:new URL('',import.meta.url).href,
+    BGM:new URL("../../assets/audio/BGMusic.mp3",import.meta.url).href,
     //Sourced from Pixabay, audio by universefield
-    bubble:new URL('',import.meta.url).href,
+    bubble:new URL("../../assets/audio/bubblePopAudio.mp3",import.meta.url).href,
     //Sourced from Pixabay, audio by freesoundeffects
-    button:new URL('',import.meta.url).href,
+    button:new URL("../../assets/audio/buttonClick.mp3",import.meta.url).href,
+    //sourced from Pixabay, audio by Humordome
+    sparkleTone:new URL("../../assets/audio/sparkle.mp3",import.meta.url).href,
+    //Sourced from Pixabay, audio by universefield
+    FireworkTone:new URL("../../assets/audio/fireworkMoment.mp3",import.meta.url).href,
 }
 
 
 export type AssetAlias = keyof typeof Manifest;
 export type AudioAlias = keyof typeof AudioManifest;
-
-// the two heavy elements for the end card
-//added as plain DOM elements for ease of use
-export const EndCardMedia = 
-{
-    TVCGIF:new URL("",import.meta.url).href,
-    BitzeeVideo:new URL("",import.meta.url).href
-};

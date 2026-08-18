@@ -3,7 +3,6 @@ import { tweenTint, } from "../helpers/tint-tween";
 import { Tween } from "../helpers/tween";
 import { ctx } from "../core/context";
 import type { AssetAlias } from "../core/manifest";
-import { rgbStringToArray } from "../helpers/colors";
 import { TankColors } from "../constants";
 
 interface AquariumElement{

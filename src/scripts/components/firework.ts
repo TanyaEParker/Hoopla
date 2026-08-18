@@ -23,6 +23,8 @@ export class Firework extends Container {
     Tween.to(this.firework.scale,{x:2,y:2},0.8,Tween.easeInOutQuad,callback);
     Tween.to(this.firework,{y:-20,alpha:1,rotation:4},.5,Tween.easeInQuad,()=>
       {
+        ctx.assets.getSound("FireworkTone");
+
         Tween.to(this.firework,{y:-40,alpha:0,rotation:6},0.25,Tween.easeOutQuad)
       });
   }

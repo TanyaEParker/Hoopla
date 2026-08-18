@@ -31,6 +31,7 @@ export class EvolutionScene extends Scene {
     sprite.anchor.set(0.5);
     sprite.x = DESIGN_WIDTH / 2;
     sprite.y = DESIGN_HEIGHT * 0.665;
+    this.addChild(sprite)
     return sprite;
   }
   private createRope(outlineMask:Sprite):EvolutionRope{
@@ -39,6 +40,7 @@ export class EvolutionScene extends Scene {
     rope.y = DESIGN_HEIGHT * 0.67;
     rope.alpha = 0;
     rope.outline.mask = outlineMask;
+    this.addChild(rope)
     return rope;
   }
   onEnter() {
@@ -54,28 +56,22 @@ export class EvolutionScene extends Scene {
     this.createParticles();
 
     this.basicSprite = this.createSprite("turtleBasic");
-    this.addChild(this.basicSprite);
 
     this.basicSpriteMask = this.createSprite("turtleBasicMask");
     this.basicSpriteMask.renderable = false;
-    this.addChild(this.basicSpriteMask);
 
     this.basicRope = this.createRope(this.basicSpriteMask);
-    this.addChild(this.basicRope);
     
     this.evolvedSprite = this.createSprite("turtleEvolved");
     this.evolvedSprite.visible = false;
-    this.addChild(this.evolvedSprite);
     
     this.evolvedSpriteMask = this.createSprite("turtleEvolvedMask");
     this.evolvedSpriteMask.renderable = false;
-    this.addChild(this.evolvedSpriteMask);
     
     this.evolvedRope = this.createRope(this.evolvedSpriteMask);
     this.evolvedRope.scale.set(0);
     this.evolvedRope.visible = false;
-    this.addChild(this.evolvedRope);
-
+    
     
     // Particle burst helper — fires particles in random spray
     const spawnParticles = (x: number, y: number, count = 1) => {
@@ -98,7 +94,7 @@ export class EvolutionScene extends Scene {
         
         const shootAngle =  (Math.PI * 2 * i) / count;
         const shootDist = 300;
-        
+        ctx.assets.getSound('sparkleTone');
         const tween = Tween.to(
           p,
           { x: x + Math.cos(shootAngle) * shootDist, y: y + Math.sin(shootAngle) * shootDist, alpha: 0,rotation:90},
@@ -167,6 +163,12 @@ export class EvolutionScene extends Scene {
     }
   };
   onExit() {
+    if (this.manager.hud.heart)
+      {
+        this.manager.hud.heart.destroy();
+        this.manager.hud.heart = null;
+      }
+
     this.activeTweens.forEach(t => Tween.stop(t));
     this.activeTweens = [];
     

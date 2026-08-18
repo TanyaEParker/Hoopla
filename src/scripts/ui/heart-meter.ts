@@ -1,39 +1,50 @@
-import { Container, Graphics } from "pixi.js";
+import { Container, Sprite, Graphics } from "pixi.js";
+import { ctx } from "../core/context";
+import { DESIGN_HEIGHT, DESIGN_WIDTH } from "../constants";
+import { Tween } from "../helpers/tween";
 
 export class HeartMeter extends Container {
-  maxValue = 2; // e.g. 3 completed games = full heart -> evolution
+  maxValue = 1.4; 
   value = 0;
-  private outline = new Graphics();
-  private fill = new Graphics();
-  private fillMask = new Graphics();
+  private heartOutline: Sprite;
+  private heartFill: Sprite;
+  private fillMask: Graphics;
 
   constructor() {
     super();
-    this.addChild(this.fill, this.outline, this.fillMask);
-    this.fill.mask = this.fillMask;
-    this.drawHeartPath(this.outline, 'rgb(255,0,0)', false);
+    
+    this.heartFill = new Sprite(ctx.assets.get("heartFill"));
+    this.heartFill.anchor.set(0.5);
+    this.addChild(this.heartFill);
+    
+    this.fillMask = new Graphics();
+    this.addChild(this.fillMask);
+    this.heartFill.mask = this.fillMask;
+    
+    this.heartOutline = new Sprite(ctx.assets.get("heart"));
+    this.heartOutline.anchor.set(0.5);
+    this.addChild(this.heartOutline);
+    
     this.redrawFill();
-  }
-
-  private drawHeartPath(g: Graphics, color: string, filled: boolean) {
-    g.clear();
-    g.moveTo(0, 12);
-    g.bezierCurveTo(-30, -20, -60, 10, 0, 50);
-    g.bezierCurveTo(60, 10, 30, -20, 0, 12);
-    if (filled) {
-      g.fill({ color });
-    } else {
-      g.stroke({ width: 4, color });
-    }
+    this.x = DESIGN_WIDTH * 0.5;
+    this.y = DESIGN_HEIGHT * 0.225
+    this.scale.set(0)
+    Tween.to(this.scale,{x:4,y:4},0.25,Tween.easeInOutQuad);
   }
 
   private redrawFill() {
     const pct = this.value / this.maxValue;
-    this.fillMask
-      .clear()
-      .rect(-60, 50 - 70 * pct, 120, 70 * pct)
-      .fill({ color: 0xffffff });
-    this.drawHeartPath(this.fill, 'rgb(255,0,0)', true);
+    const height = this.heartOutline.height;
+    const maskHeight = height * pct;
+    
+    this.fillMask.clear();
+    this.fillMask.rect(
+      -this.heartOutline.width / 2,
+      height / 2 - maskHeight,
+      this.heartOutline.width,
+      maskHeight
+    );
+    this.fillMask.fill({ color: 0xffffff });
   }
 
   reset(): void {

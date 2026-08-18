@@ -56,7 +56,6 @@ class TweenController {
       const eased = t.easing(progress);
       for (const key in t.props) {
         t.target[key] = t.start[key] + (t.props[key] - t.start[key]) * eased;
-        if(t.target[key]==null)console.log('null')
       }
       t.onUpdate?.(t.target);
       if (progress >= 1) {

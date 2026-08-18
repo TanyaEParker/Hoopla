@@ -3,9 +3,12 @@ import { Tween } from "../helpers/tween";
 import { setBackdropCharacter } from "../helpers/backdrop";
 import { DESIGN_WIDTH, DESIGN_HEIGHT } from "../constants";
 import { Character } from "../components/character";
-import type { AssetAlias } from "../core/manifest";
+import { AudioManifest, type AssetAlias } from "../core/manifest";
 import { buildLabel } from "../helpers/buildLabel";
 import { ColorPickerScene } from "./color-picker-scene";
+import { sound } from "@pixi/sound";
+import { ctx } from "../core/context";
+
 
 interface CharacterData {
   alias :AssetAlias,
@@ -24,6 +27,7 @@ const CHARACTERS:CharacterData[]=[
 
 export class CharacterSelectScene extends Scene {
   private characterButtons:Character[] = [];
+  
   onEnter() {
     this.addChild(buildLabel("PLAY TO\nUNLOCK MORE"));
     for(let index of CHARACTERS)
@@ -38,6 +42,7 @@ export class CharacterSelectScene extends Scene {
       {
         character.characterSprite.on("pointertap",()=>
           {
+            ctx.assets.getSound('button');
             setBackdropCharacter(index.alias);
             this.manager.goTo(ColorPickerScene)
             

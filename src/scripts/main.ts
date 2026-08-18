@@ -33,7 +33,6 @@ async function boot() {
     app.canvas.style.width = `${DESIGN_WIDTH * scale}px`;
     app.canvas.style.height = `${DESIGN_HEIGHT * scale}px`;
     if(!endUI)return
-    console.log('resizing End UI')
       endUI.style.height = app.canvas.style.height;
       endUI.style.width = app.canvas.style.width;
   };
